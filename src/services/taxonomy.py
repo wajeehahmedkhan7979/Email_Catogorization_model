@@ -25,7 +25,10 @@ class Taxonomy:
         self.path = Path(taxonomy_path)
         self.data: Dict = json.loads(self.path.read_text(encoding="utf-8"))
         centroids_info = self.data.get("centroids_info", {})
-        centroids_file = centroids_info.get("file", "taxonomy_centroids_v1.npy")
+        centroids_file = centroids_info.get(
+            "file",
+            "taxonomy_centroids_v1.npy",
+        )
         self.centroid_labels: Sequence[str] = centroids_info.get("labels", [])
         self.centroids: np.ndarray = np.load(centroids_file)
 

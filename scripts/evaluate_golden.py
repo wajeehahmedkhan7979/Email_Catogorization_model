@@ -82,10 +82,11 @@ def main(data_path: str, threshold: float) -> None:
         print(f"{t} -> {p}: {c}")
 
     if accuracy < threshold:
-        print(
-            f"Accuracy {accuracy:.3f} below threshold {threshold:.3f}; failing.",
-            file=sys.stderr,
+        msg = (
+            f"Accuracy {accuracy:.3f} below threshold "
+            f"{threshold:.3f}; failing."
         )
+        print(msg, file=sys.stderr)
         sys.exit(1)
 
 
@@ -104,5 +105,3 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     main(args.data, args.threshold)
-
-

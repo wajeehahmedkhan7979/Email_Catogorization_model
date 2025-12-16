@@ -29,7 +29,9 @@ class BlobClientFactory:
     """
 
     def __init__(
-        self, account_url: str, credential: Optional[DefaultAzureCredential] = None
+        self,
+        account_url: str,
+        credential: Optional[DefaultAzureCredential] = None,
     ) -> None:
         self.account_url = account_url
         self.credential = credential or DefaultAzureCredential()
@@ -71,8 +73,14 @@ class BlobClientFactory:
         """
         service = self._get_service_client()
         temp_name = f"{blob}.tmp-{uuid.uuid4().hex}"
-        temp_client = service.get_blob_client(container=container, blob=temp_name)
-        target_client = service.get_blob_client(container=container, blob=blob)
+        temp_client = service.get_blob_client(
+            container=container,
+            blob=temp_name,
+        )
+        target_client = service.get_blob_client(
+            container=container,
+            blob=blob,
+        )
 
         payload = json.dumps(data, ensure_ascii=False).encode("utf-8")
 
@@ -86,10 +94,18 @@ class BlobClientFactory:
                 getattr(copy_props, "copy_status", "unknown"),
             )
         except Exception as exc:  # pragma: no cover - defensive logging
-            logger.exception("Failed to upload JSON blob %s: %s", blob, exc)
+            logger.exception(
+                "Failed to upload JSON blob %s: %s",
+                blob,
+                exc,
+            )
             raise
         finally:
             try:
                 temp_client.delete_blob()
             except Exception as exc:  # pragma: no cover - best-effort cleanup
-                logger.warning("Failed to delete temp blob %s: %s", temp_name, exc)
+                logger.warning(
+                    "Failed to delete temp blob %s: %s",
+                    temp_name,
+                    exc,
+                )

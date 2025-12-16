@@ -21,7 +21,10 @@ class EmailPayload(BaseModel):
     prior to any conversation/thread merging.
     """
 
-    message_id: str = Field(..., description="Unique identifier of the email.")
+    message_id: str = Field(
+        ...,
+        description="Unique identifier of the email.",
+    )
     subject: str = Field(..., description="Subject line of the email.")
     body: str = Field(..., description="Raw body text or HTML content.")
     sender: str = Field(..., description="Sender email address.")
@@ -33,7 +36,8 @@ class EmailPayload(BaseModel):
         description="List of attachment filenames associated with the email.",
     )
     timestamp: datetime = Field(
-        ..., description="Timestamp when the email was sent/received."
+        ...,
+        description="Timestamp when the email was sent/received.",
     )
     priority: Optional[str] = Field(
         None,
@@ -56,7 +60,9 @@ class EmailPayload(BaseModel):
     @validator("recipients")
     def validate_recipients(cls, value: List[str]) -> List[str]:
         if not value:
-            raise ValueError("recipients must contain at least one email address.")
+            raise ValueError(
+                "recipients must contain at least one email address."
+            )
         return value
 
     @validator("subject", "body", "sender")
@@ -81,5 +87,3 @@ class EmailPayload(BaseModel):
 
 
 __all__ = ["EmailPayload", "ValidationError"]
-
-

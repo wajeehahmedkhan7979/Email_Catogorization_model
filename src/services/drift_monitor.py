@@ -39,4 +39,3 @@ class DriftMonitor:
             return "LOW_CONFIDENCE_SPIKE"
 
         return None
-

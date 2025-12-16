@@ -92,14 +92,18 @@ class Settings(BaseSettings):
     max_payload_bytes: int = Field(
         512_000,
         env="MAX_PAYLOAD_BYTES",
-        description="Maximum allowed payload size in bytes for a single email.",
+        description=(
+            "Maximum allowed payload size in bytes for a single email."
+        ),
     )
 
     # Optional secrets / Key Vault
     key_vault_url: Optional[str] = Field(
         None,
         env="KEY_VAULT_URL",
-        description="Azure Key Vault URL (optional, for third‑party secrets).",
+        description=(
+            "Azure Key Vault URL (optional, for third‑party secrets)."
+        ),
     )
     third_party_api_secret_name: Optional[str] = Field(
         None,
@@ -114,16 +118,17 @@ class Settings(BaseSettings):
     @validator("azure_storage_account_url")
     def validate_account_url(cls, value: str) -> str:
         if not value.startswith("https://"):
-            raise ValueError(
+            msg = (
                 "AZURE_STORAGE_ACCOUNT_URL must be a valid HTTPS URL "
                 f"(got '{value}')."
             )
+            raise ValueError(msg)
         return value.rstrip("/")
 
     @validator("allowed_languages", pre=True)
     def parse_allowed_languages(cls, value):  # type: ignore[no-untyped-def]
         """
-        Allow ALLOWED_LANGUAGES to be expressed as JSON or comma-separated string.
+        Allow ALLOWED_LANGUAGES as JSON or comma-separated string.
         """
         if isinstance(value, list):
             return value
@@ -139,7 +144,9 @@ class Settings(BaseSettings):
     @validator("max_payload_bytes")
     def validate_max_payload_bytes(cls, value: int) -> int:
         if value <= 0:
-            raise ValueError("MAX_PAYLOAD_BYTES must be a positive integer.")
+            raise ValueError(
+                "MAX_PAYLOAD_BYTES must be a positive integer."
+            )
         if value > 10_000_000:
             raise ValueError(
                 "MAX_PAYLOAD_BYTES is unreasonably large; "
@@ -160,7 +167,10 @@ class Settings(BaseSettings):
 
         try:
             credential = DefaultAzureCredential()
-            client = SecretClient(vault_url=self.key_vault_url, credential=credential)
+            client = SecretClient(
+                vault_url=self.key_vault_url,
+                credential=credential,
+            )
             secret = client.get_secret(self.third_party_api_secret_name)
             return secret.value
         except Exception as exc:  # pragma: no cover - defensive logging

@@ -58,4 +58,3 @@ def test_conversation_merging_basic(base_payload: EmailPayload) -> None:
     assert "Hello, this is a body." in conv.body
     assert 0.0 <= conv.thread_consistency <= 1.0
 
-

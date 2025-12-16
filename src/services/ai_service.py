@@ -64,7 +64,11 @@ class IntentClassifier:
             self.classifier = bundle["classifier"]
             self.label_encoder = bundle["labels"]
         except Exception as exc:  # pragma: no cover - defensive logging
-            logger.exception("Failed to load intent model from %s: %s", model_path, exc)
+            logger.exception(
+                "Failed to load intent model from %s: %s",
+                model_path,
+                exc,
+            )
             raise
 
     def predict(self, text: str) -> Tuple[str, float]:

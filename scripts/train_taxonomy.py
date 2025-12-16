@@ -66,7 +66,9 @@ def main(input_path: str, taxonomy_json: str, centroids_out: str) -> None:
 
     centroids_map = compute_centroids(embeddings, labels)
     ordered_labels = list(centroids_map.keys())
-    centroid_matrix = np.vstack([centroids_map[l] for l in ordered_labels])
+    centroid_matrix = np.vstack(
+        [centroids_map[label] for label in ordered_labels]
+    )
 
     # Compute summary similarity stats (each sample vs its centroid).
     sims = []
@@ -82,7 +84,9 @@ def main(input_path: str, taxonomy_json: str, centroids_out: str) -> None:
     taxonomy = {
         "version": "v1.0",
         "labels": {
-            "level1": sorted({l.split(" > ")[0] for l in ordered_labels}),
+            "level1": sorted(
+                {label.split(" > ")[0] for label in ordered_labels}
+            ),
             "level2": {},
         },
         "centroids_info": {
@@ -96,7 +100,10 @@ def main(input_path: str, taxonomy_json: str, centroids_out: str) -> None:
         },
     }
 
-    Path(taxonomy_json).write_text(json.dumps(taxonomy, indent=2), encoding="utf-8")
+    Path(taxonomy_json).write_text(
+        json.dumps(taxonomy, indent=2),
+        encoding="utf-8",
+    )
     print(f"Saved taxonomy to {taxonomy_json}")
     print(f"Average similarity to centroid: {avg_similarity:.3f}")
 
@@ -112,4 +119,3 @@ if __name__ == "__main__":
     parser.add_argument("--centroids-out", default="taxonomy_centroids_v1.npy")
     args = parser.parse_args()
     main(args.input, args.taxonomy_json, args.centroids_out)
-

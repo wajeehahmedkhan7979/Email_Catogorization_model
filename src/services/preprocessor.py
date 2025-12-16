@@ -85,9 +85,9 @@ def _estimate_thread_consistency(parts: List[str]) -> float:
     non_empty = [p for p in parts if p.strip()]
     if not non_empty:
         return 0.0
-    lengths = [len(p) for p in non_empty]
+    lengths = [len(part) for part in non_empty]
     avg = sum(lengths) / len(lengths)
-    variance = sum((l - avg) ** 2 for l in lengths) / len(lengths)
+    variance = sum((length - avg) ** 2 for length in lengths) / len(lengths)
     # Normalise: smaller variance -> higher consistency.
     score = max(0.0, min(1.0, 1.0 / (1.0 + variance / (avg + 1.0))))
     return float(score)
