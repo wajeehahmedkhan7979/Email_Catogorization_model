@@ -6,15 +6,19 @@ from pydantic import BaseSettings, Field, validator
 
 
 class Settings(BaseSettings):
+    azure_storage_account_url: str = Field(..., env="AZURE_STORAGE_ACCOUNT_URL")
     # Storage / queues
     input_container: str = Field(..., env="INPUT_CONTAINER")
     output_container: str = Field(..., env="OUTPUT_CONTAINER")
     poison_container: str = Field(..., env="POISON_CONTAINER")
     queue_name: str = Field(..., env="QUEUE_NAME")
+    poison_queue_name: str = Field(..., env="POISON_QUEUE_NAME")
+    max_retries: int = Field(5, env="MAX_RETRIES")
+    drift_window: int = Field(1000, env="DRIFT_WINDOW")
 
     # Models and taxonomy
     model_version: str = Field("v1", env="MODEL_VERSION")
-    taxonomy_path: str = Field(default="taxonomy_v1.json", env="TAXONOMY_PATH")
+    taxonomy_path: str = Field("taxonomy_v1.json", env="TAXONOMY_PATH")
     allowed_languages: List[str] = Field(default_factory=lambda: ["en", "es"])
 
     # Optional paths / keys
