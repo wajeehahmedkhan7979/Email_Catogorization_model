@@ -1,11 +1,95 @@
 {
-  "version": "v1.0",
+  "version": "v1.0-real-estate",
   "created_on": "2025-12-16",
   "labels": {
-    "level1": ["Other"],
-    "level2": {"Other": ["Other"]},
-    "level3": ["Intent: Other"]
+    "level1": [
+      "Leasing",
+      "Maintenance",
+      "Payments",
+      "Legal & Compliance",
+      "Sales & Marketing",
+      "Other"
+    ],
+    "level2": {
+      "Leasing": [
+        "New Inquiry",
+        "Application",
+        "Lease Renewal",
+        "Move-in / Move-out"
+      ],
+      "Maintenance": [
+        "Urgent Repair",
+        "Routine Repair",
+        "Inspection",
+        "Vendor Coordination"
+      ],
+      "Payments": [
+        "Rent Payment",
+        "Late Fee Dispute",
+        "Refund / Deposit",
+        "Invoice / Billing Question"
+      ],
+      "Legal & Compliance": [
+        "Notice to Vacate",
+        "Eviction",
+        "Regulatory Inquiry",
+        "Insurance / Liability"
+      ],
+      "Sales & Marketing": [
+        "Lead Generation",
+        "Property Showing",
+        "Listing Update",
+        "Campaign Response"
+      ],
+      "Other": [
+        "Uncategorized"
+      ]
+    },
+    "level3": [
+      "Intent: Request Information",
+      "Intent: Status Update",
+      "Intent: Complaint",
+      "Intent: Confirmation",
+      "Intent: Cancellation",
+      "Intent: Urgent Issue",
+      "Intent: Other"
+    ]
   },
-  "metadata": {"note": "Placeholder taxonomy; replace with human-reviewed set"}
+  "centroids_info": {
+    "file": "taxonomy_centroids_v1.npy",
+    "labels": [
+      "Leasing > New Inquiry",
+      "Leasing > Application",
+      "Leasing > Lease Renewal",
+      "Leasing > Move-in / Move-out",
+      "Maintenance > Urgent Repair",
+      "Maintenance > Routine Repair",
+      "Maintenance > Inspection",
+      "Maintenance > Vendor Coordination",
+      "Payments > Rent Payment",
+      "Payments > Late Fee Dispute",
+      "Payments > Refund / Deposit",
+      "Payments > Invoice / Billing Question",
+      "Legal & Compliance > Notice to Vacate",
+      "Legal & Compliance > Eviction",
+      "Legal & Compliance > Regulatory Inquiry",
+      "Legal & Compliance > Insurance / Liability",
+      "Sales & Marketing > Lead Generation",
+      "Sales & Marketing > Property Showing",
+      "Sales & Marketing > Listing Update",
+      "Sales & Marketing > Campaign Response",
+      "Other > Uncategorized"
+    ],
+    "description": "Each label corresponds to a centroid row in taxonomy_centroids_v1.npy in the same order."
+  },
+  "documentation": {
+    "version": "Semantic version of the taxonomy definition.",
+    "labels.level1": "Top-level business categories for real estate operations.",
+    "labels.level2": "Nested mapping of level1 category to its level2 subcategories.",
+    "labels.level3": "Cross-cutting intent labels applied independently of level1/2.",
+    "centroids_info.file": "Path to NumPy .npy file storing centroid vectors.",
+    "centroids_info.labels": "Ordered list of 'Level1 > Level2' labels aligned to centroid rows.",
+    "created_on": "ISO date when this taxonomy version was approved."
+  }
 }
 

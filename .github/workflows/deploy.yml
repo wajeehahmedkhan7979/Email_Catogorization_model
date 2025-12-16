@@ -11,20 +11,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
       - name: Lint
         run: |
           flake8 src scripts tests
           black --check src scripts tests
-      - name: Tests
+
+      - name: Run tests
         run: pytest
+
+      - name: Golden dataset evaluation
+        run: |
+          python scripts/evaluate_golden.py --data data/golden_dataset_v1.jsonl --threshold 0.80
 
   deploy:
     needs: build-test
@@ -32,19 +40,23 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
       - name: Build artifact
         run: |
           zip -r deploy.zip src requirements.txt version.py
+
       - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ secrets.AZURE_APP_NAME }}
           publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
