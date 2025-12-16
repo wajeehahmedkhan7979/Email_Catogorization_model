@@ -1,0 +1,11 @@
+{
+  "version": "v1.0",
+  "created_on": "2025-12-16",
+  "labels": {
+    "level1": ["Other"],
+    "level2": {"Other": ["Other"]},
+    "level3": ["Intent: Other"]
+  },
+  "metadata": {"note": "Placeholder taxonomy; replace with human-reviewed set"}
+}
+
