@@ -50,7 +50,8 @@ class Taxonomy:
     @property
     def is_placeholder(self) -> bool:
         """
-        True if the taxonomy appears to be a placeholder (single generic label).
+        True if the taxonomy appears to be a placeholder
+        (single generic label).
         """
         labels = self.data.get("labels", {})
         return len(labels.get("level1", [])) <= 1

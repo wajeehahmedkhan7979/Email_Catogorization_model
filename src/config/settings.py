@@ -54,7 +54,9 @@ class Settings(BaseSettings):
     output_container: str = Field(
         ...,
         env="OUTPUT_CONTAINER",
-        description="Name of the output Blob container for classified results.",
+        description=(
+            "Name of the output Blob container for classified results."
+        ),
     )
     poison_queue_name: str = Field(
         ...,
@@ -138,7 +140,9 @@ class Settings(BaseSettings):
                 if isinstance(parsed, list):
                     return parsed
             except json.JSONDecodeError:
-                return [lang.strip() for lang in value.split(",") if lang.strip()]
+                return [
+                    lang.strip() for lang in value.split(",") if lang.strip()
+                ]
         return ["en", "es"]
 
     @validator("max_payload_bytes")
@@ -184,7 +188,7 @@ def get_settings() -> Settings:
     Load and cache application settings.
 
     Raises:
-        ValidationError: if any required configuration value is missing or invalid.
+        ValidationError: if any required configuration value is invalid.
     """
     try:
         return Settings()  # type: ignore[arg-type]

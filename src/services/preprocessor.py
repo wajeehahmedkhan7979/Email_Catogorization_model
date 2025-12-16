@@ -132,7 +132,11 @@ def preprocess_payload(
     # Thread consistency: for a single-message payload treat as trivial thread.
     thread_consistency = _estimate_thread_consistency([merged_text])
 
-    conv_id = payload.conversation_id or payload.thread_id or payload.message_id
+    conv_id = (
+        payload.conversation_id
+        or payload.thread_id
+        or payload.message_id
+    )
 
     return Conversation(
         conversation_id=conv_id,
