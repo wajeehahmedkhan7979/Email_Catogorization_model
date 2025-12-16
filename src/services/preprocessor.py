@@ -2,12 +2,13 @@ import re
 from typing import List, Optional
 
 from bs4 import BeautifulSoup
-from langdetect import detect, LangDetectException
+from langdetect import LangDetectException, detect
 
 from src.models import Conversation, EmailPayload
 
-
-FOOTER_REGEX = re.compile(r"(sent from my|envoyé de mon|enviado desde mi)", re.IGNORECASE)
+FOOTER_REGEX = re.compile(
+    r"(sent from my|envoyé de mon|enviado desde mi)", re.IGNORECASE
+)
 
 
 def strip_html(text: str) -> str:
@@ -23,7 +24,9 @@ def detect_language(text: str, allowed: List[str]) -> Optional[str]:
         return None
 
 
-def preprocess_payload(payload: EmailPayload, allowed_languages: List[str]) -> Optional[Conversation]:
+def preprocess_payload(
+    payload: EmailPayload, allowed_languages: List[str]
+) -> Optional[Conversation]:
     if not payload.messages:
         return None
 
@@ -53,4 +56,3 @@ def preprocess_payload(payload: EmailPayload, allowed_languages: List[str]) -> O
         attachments=attachments,
         metadata={"message_count": len(payload.messages)},
     )
-

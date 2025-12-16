@@ -48,7 +48,9 @@ def worker_loop():
     from src.services.queue_client import QueueClientFactory
 
     blob_factory = BlobClientFactory(account_url=account_url)
-    queue_factory = QueueClientFactory(account_url=account_url, queue_name=settings.queue_name)
+    queue_factory = QueueClientFactory(
+        account_url=account_url, queue_name=settings.queue_name
+    )
     queue = queue_factory.get_client()
     embedder = EmbeddingService()
 
@@ -57,19 +59,29 @@ def worker_loop():
     taxonomy = Taxonomy(settings.taxonomy_path, embeddings=dummy_centroids)
 
     while not SHOULD_STOP:
-        messages = queue.receive_messages(messages_per_page=1, visibility_timeout=300)
+        messages = queue.receive_messages(
+            messages_per_page=1, visibility_timeout=300
+        )
         received = False
         for msg in messages:
             received = True
             blob_name = parse_queue_message(msg)
             if not blob_name:
-                logger.warning("Could not parse queue message, deleting: %s", msg.id)
+                logger.warning(
+                    "Could not parse queue message, deleting: %s", msg.id
+                )
                 queue.delete_message(msg)
                 continue
 
             try:
-                blob_client = blob_factory.get_client().get_blob_client(container=settings.input_container, blob=blob_name)
-                payload_text = blob_client.download_blob().readall().decode("utf-8", errors="ignore")
+                blob_client = blob_factory.get_client().get_blob_client(
+                    container=settings.input_container, blob=blob_name
+                )
+                payload_text = (
+                    blob_client.download_blob()
+                    .readall()
+                    .decode("utf-8", errors="ignore")
+                )
                 payload = EmailPayload.parse_raw(payload_text)
             except ResourceNotFoundError:
                 logger.exception("Blob not found: %s", blob_name)
@@ -80,9 +92,13 @@ def worker_loop():
                 queue.delete_message(msg)
                 continue
 
-            conversation = preprocess_payload(payload, allowed_languages=settings.allowed_languages)
+            conversation = preprocess_payload(
+                payload, allowed_languages=settings.allowed_languages
+            )
             if not conversation:
-                logger.info("Empty conversation for blob %s, deleting message.", blob_name)
+                logger.info(
+                    "Empty conversation for blob %s, deleting message.", blob_name
+                )
                 queue.delete_message(msg)
                 continue
 
@@ -97,7 +113,8 @@ def worker_loop():
             }
 
             target_blob = blob_factory.get_client().get_blob_client(
-                container=settings.output_container, blob=f"{conversation.conversation_id}.json"
+                container=settings.output_container,
+                blob=f"{conversation.conversation_id}.json",
             )
             target_blob.upload_blob(json.dumps(output), overwrite=True)
             queue.delete_message(msg)
@@ -109,4 +126,3 @@ def worker_loop():
 
 if __name__ == "__main__":
     worker_loop()
-

@@ -43,4 +43,3 @@ class Conversation(BaseModel):
     language: Optional[str] = None
     attachments: List[Attachment] = Field(default_factory=list)
     metadata: dict = Field(default_factory=dict)
-

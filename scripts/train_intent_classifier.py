@@ -4,12 +4,11 @@ Starts with logistic regression; swap in a fine-tuned transformer if needed.
 """
 
 import joblib
-import numpy as np
 import pandas as pd
 from sentence_transformers import SentenceTransformer
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
+from sklearn.model_selection import train_test_split
 
 
 def main(data_path: str, model_path: str = "intent_model_v1.pkl"):
@@ -17,7 +16,9 @@ def main(data_path: str, model_path: str = "intent_model_v1.pkl"):
     model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
     embeddings = model.encode(df["text"].tolist(), convert_to_numpy=True)
 
-    X_train, X_test, y_train, y_test = train_test_split(embeddings, df["label"], test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(
+        embeddings, df["label"], test_size=0.2, random_state=42
+    )
     clf = LogisticRegression(max_iter=1000)
     clf.fit(X_train, y_train)
     preds = clf.predict(X_test)
@@ -34,4 +35,3 @@ if __name__ == "__main__":
     parser.add_argument("--output", default="intent_model_v1.pkl")
     args = parser.parse_args()
     main(args.data, args.output)
-

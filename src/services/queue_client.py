@@ -5,7 +5,12 @@ from azure.storage.queue import QueueClient
 
 
 class QueueClientFactory:
-    def __init__(self, account_url: str, queue_name: str, credential: Optional[DefaultAzureCredential] = None):
+    def __init__(
+        self,
+        account_url: str,
+        queue_name: str,
+        credential: Optional[DefaultAzureCredential] = None,
+    ):
         self.account_url = account_url
         self.queue_name = queue_name
         self.credential = credential or DefaultAzureCredential()
@@ -19,4 +24,3 @@ class QueueClientFactory:
                 credential=self.credential,
             )
         return self._client
-

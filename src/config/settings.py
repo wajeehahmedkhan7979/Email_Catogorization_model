@@ -1,5 +1,4 @@
 import json
-import os
 from functools import lru_cache
 from typing import List, Optional
 
@@ -21,7 +20,9 @@ class Settings(BaseSettings):
     # Optional paths / keys
     spam_keywords_path: Optional[str] = Field(None, env="SPAM_KEYWORDS_PATH")
     key_vault_url: Optional[str] = Field(None, env="KEY_VAULT_URL")
-    app_insights_key: Optional[str] = Field(None, env="APP_INSIGHTS_INSTRUMENTATIONKEY")
+    app_insights_key: Optional[str] = Field(
+        None, env="APP_INSIGHTS_INSTRUMENTATIONKEY"
+    )
 
     class Config:
         env_file = ".env"
@@ -42,4 +43,3 @@ class Settings(BaseSettings):
 @lru_cache()
 def get_settings() -> Settings:
     return Settings()  # type: ignore[arg-type]
-

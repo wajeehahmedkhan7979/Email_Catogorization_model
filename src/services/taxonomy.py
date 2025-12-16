@@ -19,4 +19,3 @@ class Taxonomy:
     @property
     def version(self) -> str:
         return self.data.get("version", "unknown")
-
